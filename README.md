@@ -12,3 +12,21 @@ UCI German Credit dataset (1,000 real loans). The classes are **imbalanced**
 (~30% defaults), and features carry clear signal — e.g., applicants with under
 100 DM in their checking account default ~49% of the time vs. ~12% for those
 who bank elsewhere. This makes the problem both learnable and realistic.
+
+## Methodology
+
+### 1. Train / test split
+The data is split **75% training / 25% test**, stratified on the target so the
+~30% default rate is preserved in both halves. The test set is held out and used
+only for final evaluation — this is how we measure whether the model
+**generalizes** to new applicants rather than memorizing the ones it saw.
+
+### 2. Preventing data leakage
+Any information that wouldn't be available at loan-application time is a
+**leakage** risk. Two concrete steps guard against it:
+- The raw `credit_risk` label is dropped the moment the `default` target is
+  built, so the model can never read the answer directly.
+- All preprocessing is fit on training data only (see Step 3).
+
+A fixed `random_state=42` makes the split — and every result that flows from it
+— fully **reproducible**.

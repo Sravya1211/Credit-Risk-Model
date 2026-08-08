@@ -1,0 +1,72 @@
+{
+  "dataset": {
+    "n_train": 750,
+    "n_test": 250,
+    "default_rate": 0.3
+  },
+  "cost_matrix": {
+    "false_negative": 5.0,
+    "false_positive": 1.0
+  },
+  "models": {
+    "logistic_regression": {
+      "model": "logistic_regression",
+      "roc_auc": 0.807,
+      "pr_auc": 0.6433,
+      "chosen_threshold": 0.47,
+      "cost_at_chosen_threshold": 116.0,
+      "cost_at_0.50_threshold": 123.0,
+      "confusion_matrix_at_threshold": [
+        [
+          124,
+          51
+        ],
+        [
+          13,
+          62
+        ]
+      ]
+    },
+    "random_forest": {
+      "model": "random_forest",
+      "roc_auc": 0.8055,
+      "pr_auc": 0.6074,
+      "chosen_threshold": 0.17,
+      "cost_at_chosen_threshold": 112.0,
+      "cost_at_0.50_threshold": 234.0,
+      "confusion_matrix_at_threshold": [
+        [
+          73,
+          102
+        ],
+        [
+          2,
+          73
+        ]
+      ]
+    }
+  },
+  "selected_model": "random_forest",
+  "example_adverse_action_reasons": [
+    {
+      "feature": "categorical__status_... < 100 DM",
+      "shap_contribution": 0.0646
+    },
+    {
+      "feature": "categorical__status_no checking account",
+      "shap_contribution": 0.0602
+    },
+    {
+      "feature": "categorical__property_unknown/no property",
+      "shap_contribution": 0.0522
+    },
+    {
+      "feature": "numeric__duration",
+      "shap_contribution": 0.0459
+    },
+    {
+      "feature": "categorical__credit_history_no credits taken/all credits paid back duly",
+      "shap_contribution": 0.0333
+    }
+  ]
+}

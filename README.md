@@ -64,3 +64,23 @@ A custom **cost function** replaces the usual accuracy metric: a missed default
 is charged 5× as much as a needless rejection, matching the German Credit
 dataset's official cost matrix. This is the business objective we optimize
 against in Step 5.
+
+
+### 5. Evaluation
+Two ranking metrics are reported, both **threshold-independent** (they judge
+how well the model separates defaults from non-defaults across all cutoffs):
+
+- **ROC-AUC**: probability that a random defaulter gets a higher risk score
+  than a random non-defaulter. Range 0.5 (random) → 1.0 (perfect).
+- **PR-AUC**: the same idea using precision-recall, which is more informative
+  when the positive class is rare (as with our ~30% default rate).
+
+Both are computed alongside the business cost, which is what the model is
+ultimately optimized for.
+
+## How to run
+
+    git clone https://github.com/Sravya1211/Credit-Risk-Model.git
+    cd Credit-Risk-Model
+    pip install -r requirements.txt
+    python -m src.train

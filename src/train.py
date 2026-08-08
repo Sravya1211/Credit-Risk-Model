@@ -22,6 +22,7 @@ from sklearn.metrics import ConfusionMatrixDisplay, RocCurveDisplay
 from . import config
 from .data import get_splits
 from .model import build_models, evaluate, expected_cost
+from .explain import global_importance_plot, top_reasons_for_applicant
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -101,6 +102,14 @@ def main() -> dict:
         np.asarray(y_test), y_scores, best_eval.threshold,
         FIGURES_DIR / "threshold_cost.png",
     )
+    # SHAP explanations use the tree model (Random Forest)
+    rf = fitted["random_forest"]
+    global_importance_plot(
+        rf,
+        X_train.sample(min(300, len(X_train)), random_state=config.RANDOM_STATE),
+        FIGURES_DIR / "shap_summary.png",
+    )
+    example_reasons = top_reasons_for_applicant(rf, X_test.iloc[[0]])
 
     # --- Persist metrics ----------------------------------------------------
     report = {
@@ -115,6 +124,10 @@ def main() -> dict:
         },
         "models": {n: e.as_dict() for n, e in evaluations.items()},
         "selected_model": best_name,
+        "example_adverse_action_reasons": [
+            {"feature": f, "shap_contribution": round(v, 4)}
+            for f, v in example_reasons
+        ],
     }
     (REPORTS_DIR / "metrics.json").write_text(json.dumps(report, indent=2))
     print(f"\nWrote reports/metrics.json and 3 figures to reports/figures/")

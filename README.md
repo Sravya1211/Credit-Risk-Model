@@ -84,3 +84,18 @@ ultimately optimized for.
     cd Credit-Risk-Model
     pip install -r requirements.txt
     python -m src.train
+
+    ### 6. Explainability (SHAP)
+Under the US Equal Credit Opportunity Act, a lender that denies credit must
+send the applicant an **adverse action notice** listing the specific principal
+reasons. A black-box model can't produce that document, so it can't be
+deployed. This project uses **SHAP** (SHapley Additive exPlanations) to
+generate the reason codes automatically.
+
+- **Global explanations** rank the features driving default risk across the
+  whole population. Used for model auditing and fair-lending review.
+- **Local explanations** attribute a single applicant's risk score to the
+  features that raised or lowered it. This is the adverse-action document.
+
+The example reason codes for one test applicant are saved to
+`reports/metrics.json` under `example_adverse_action_reasons`.

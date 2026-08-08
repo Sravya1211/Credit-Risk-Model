@@ -46,3 +46,21 @@ Two column groups get two different treatments, bundled into one
 Wrapping preprocessing in a scikit-learn `Pipeline` guarantees fit statistics
 (means, category lists) are learned from the **training set only** — closing
 off preprocessing as a second source of data leakage.
+
+### 4. Models
+Two models are trained side by side, on purpose:
+
+- **Logistic Regression** — the industry standard for credit scoring for 60
+  years. Its coefficients are directly interpretable, which is why regulators
+  are comfortable with it.
+- **Random Forest** — an ensemble of decision trees that captures non-linear
+  patterns the logistic model can't. Used as a benchmark: if it doesn't beat
+  the simple model by much, the interpretable choice wins by default.
+
+Both use `class_weight="balanced"` to handle the ~30/70 class imbalance so the
+optimizer doesn't ignore the minority (defaulting) class.
+
+A custom **cost function** replaces the usual accuracy metric: a missed default
+is charged 5× as much as a needless rejection, matching the German Credit
+dataset's official cost matrix. This is the business objective we optimize
+against in Step 5.

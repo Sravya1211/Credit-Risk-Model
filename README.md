@@ -99,3 +99,17 @@ generate the reason codes automatically.
 
 The example reason codes for one test applicant are saved to
 `reports/metrics.json` under `example_adverse_action_reasons`.
+
+### 7. Testing
+A `pytest` suite locks in the critical behaviors:
+
+- Data loads with the expected shape and columns
+- Target inversion works: good loans → 0, bad loans → 1
+- Train/test indices are disjoint (no leakage) and stratification is preserved
+- Preprocessing produces a fully numeric matrix
+- The cost function correctly weights false negatives 5× more than false positives
+- Trained models achieve ROC-AUC well above 0.5 on the held-out test set
+
+Run the suite with:
+
+    pytest -q

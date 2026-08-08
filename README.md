@@ -30,3 +30,19 @@ Any information that wouldn't be available at loan-application time is a
 
 A fixed `random_state=42` makes the split — and every result that flows from it
 — fully **reproducible**.
+
+
+### 3. Preprocessing
+Two column groups get two different treatments, bundled into one
+`ColumnTransformer` so both are applied identically at train and prediction time:
+
+- **Numeric features** are **standardized** (`StandardScaler`) so a large-range
+  column like `amount` doesn't dominate a small-range one like `age`.
+- **Categorical features** are **one-hot encoded** (`OneHotEncoder`) so no
+  fake ordering is invented among unordered categories like `housing`.
+  `handle_unknown="ignore"` keeps the model from crashing when a new category
+  appears in production.
+
+Wrapping preprocessing in a scikit-learn `Pipeline` guarantees fit statistics
+(means, category lists) are learned from the **training set only** — closing
+off preprocessing as a second source of data leakage.
